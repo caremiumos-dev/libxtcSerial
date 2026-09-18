@@ -1,6 +1,8 @@
 lib_LTLIBRARIES = libxtcSerial.la
 
-libxtcSerial_la_SOURCES = xtcSerial.cpp
+libxtcSerial_la_SOURCES = xtcSerial.cpp xtcserial_core.cpp
+
+libxtcSerial_la_CPPFLAGS = -I$(top_srcdir)/include
 
 AM_CXXFLAGS =
 

@@ -80,10 +80,47 @@ Environment overrides `CC`, `CXX`, `AR`, `RANLIB`, `STRIP` are honoured.
 ```
 configure.ac        top-level autoconf file
 Makefile.am         top-level automake file
+include/            public C/C++ headers (installed to <prefix>/include/)
+include/xtcserial_c.h   C API: xtcs_open / xtcs_read / xtcs_write / xtcs_close
+include/xtcserial.hpp   C++ API: xtcserial::serial RAII wrapper
 src/Makefile.am     libxtcSerial.la rules
-src/xtcSerial.cpp   JNI implementation
+src/xtcSerial.cpp   JNI implementation (open_port etc.)
+src/xtcserial_core.cpp  user-facing C/C++ API implementation
 autogen.sh          autoreconf bootstrap
 build.sh            multi-ABI driver
 build/<triple>/     out-of-tree per-ABI build trees
 prebuilt/<abi>/     built .so copies
 ```
+
+## Using the C/C++ API
+
+`make install` installs `xtcserial_c.h` and `xtcserial.hpp` plus
+`libxtcSerial.so`.  The C++ API is the easiest to use:
+
+```cpp
+#include <xtcserial.hpp>
+
+xtcserial::serial ports("/dev/ttyS0",
+    xtcserial::serial_params{ /*baud=*/115200, /*data=*/8, /*stop=*/1,
+                              xtcserial::parity::none});
+if (!ports.good()) { /* open failed */ }
+
+ports.write("\xAA", 1);
+char buf[16];
+ssize_t n = ports.read(buf, sizeof buf);
+```
+
+or the plain C API:
+
+```c
+#include <xtcserial_c.h>
+
+int fd = xtcs_open("/dev/ttyS0", 115200, 8, 1, 'N');
+ssize_t n = xtcs_write(fd, "\xAA", 1);
+n = xtcs_read(fd, buf, sizeof buf);
+xtcs_close(fd);
+```
+
+Both APIs configure the port (baud / data bits / stop bits / parity) through
+termios and put it in raw mode; the exported JNI symbols
+(`JNI_OnLoad`, `native_open` ...) remain untouched.

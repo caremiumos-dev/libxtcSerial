@@ -3,7 +3,7 @@ dnl GNU Autotools (autoconf/automake/libtool) build for Android NDK.
 dnl One libxtcSerial.so per configure invocation (plain, unversioned).
 
 AC_PREREQ([2.69])
-AC_INIT([libxtcSerial], [1.0.0], [], [libxtcSerial],
+AC_INIT([libxtcSerial], [1.1.0], [], [libxtcSerial],
         [https://github.com/xtc/libxtcSerial])
 
 AC_CONFIG_SRCDIR([src/xtcSerial.cpp])
@@ -161,6 +161,7 @@ AC_SUBST([XC_LIBS])
 AC_SUBST([XC_LDFLAGS])
 
 AC_CONFIG_FILES([Makefile
+                 include/Makefile
                  src/Makefile])
 AC_OUTPUT
 

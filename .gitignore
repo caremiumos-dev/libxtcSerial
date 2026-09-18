@@ -1,0 +1,35 @@
+# autotools outputs
+autom4te.cache/
+aclocal.m4
+config.h.in
+configure
+config.log
+config.status
+config.cache
+libtool
+Makefile.in
+Makefile
+src/Makefile.in
+src/Makefile
+
+# auxiliary generated files
+build-aux/
+build/
+m4/
+.dist/
+compile
+depcomp
+install-sh
+missing
+ltmain.sh
+
+# build artifacts
+*.o
+*.lo
+*.la
+.libs/
+.libs/*
+*.log
+
+# outputs
+prebuilt/
